@@ -1,0 +1,25 @@
+import numpy as np
+
+def precision(y_true, y_pred):
+    assert len(y_true) == len(y_pred), "Input vectors should have the same length"
+    TP = np.sum((y_true == 1) & (y_pred == 1))
+    FP = np.sum((y_true == 0) & (y_pred == 1))
+    if TP + FP == 0:
+        return 0
+    return TP / (TP + FP)
+
+def recall(y_true, y_pred):
+    assert len(y_true) == len(y_pred), "Input vectors should have the same length"
+    TP = np.sum((y_true == 1) & (y_pred == 1))
+    FN = np.sum((y_true == 1) & (y_pred == 0))
+    if TP + FN == 0:
+        return 0
+    return TP / (TP + FN)
+
+def f1(y_true, y_pred):
+    assert len(y_true) == len(y_pred), "Input vectors should have the same length"
+    prec = precision(y_true, y_pred)
+    rec = recall(y_true, y_pred)
+    if prec + rec == 0:
+        return 0
+    return 2 * (prec * rec) / (prec + rec)
