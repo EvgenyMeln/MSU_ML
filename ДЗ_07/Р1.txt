@@ -1,0 +1,35 @@
+import numpy as np
+
+class sample(object):
+  def __init__(self, X, n_subspace):
+    self.idx_subspace = self.random_subspace(X, n_subspace)
+
+  def __call__(self, X, y):
+    idx_obj = self.bootstrap_sample(X)
+    X_sampled, y_sampled = self.get_subsample(X, y, self.idx_subspace, idx_obj)
+    return X_sampled, y_sampled
+
+  @staticmethod
+  def bootstrap_sample(X):
+    """
+    Заполните тело этой функции таким образом, чтобы она возвращала массив индексов выбранных при помощи бэггинга индексов.
+    Пользуйтесь только инструментами, реализованными в numpy.random, выставляя везде, где это необходимо, random_state=42
+    """
+    return np.unique(np.random.choice(X.shape[0], X.shape[0]))
+
+  @staticmethod
+  def random_subspace(X, n_subspace):
+    """
+    Заполните тело этой функции таким образом, чтобы она возвращала массив индексов выбранных при помощи метода случайных подпространств признаков
+    Количество этих признаков передается при помощи аргумента n_subspace
+    Пользуйтесь только инструментами, реализованными в numpy.random, выставляя везде, где это необходимо, random_state=42
+    """
+    return np.sort(np.random.choice(X.shape[1], n_subspace, replace=False))
+
+  @staticmethod
+  def get_subsample(X, y, idx_subspace, idx_obj):
+    """
+    Заполните тело этой функции таким образом, чтобы она возвращала подвыборку x_sampled, y_sampled
+    по значениям индексов признаков(idx_subspace) и объектов(idx_obj) , которые должны в неё попасть
+    """
+    return X[idx_obj][:, idx_subspace], y[idx_obj]
