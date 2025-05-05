@@ -1,0 +1,19 @@
+import numpy as np
+np.random.seed(42)
+
+class LinearRegression:
+    def __init__(self, **kwargs):
+        self.coef_ = None
+        pass
+
+    def fit(self, x: np.array, y: np.array):
+        # TODO: напишите метод .fit() класса LinearRegression
+        x = np.hstack((np.ones((x.shape[0], 1)), x))
+        self.coef_ = np.linalg.inv(x.T.dot(x)).dot(x.T).dot(y)
+        pass
+
+    def predict(self, x: np.array):
+        # TODO: напишите метод .predict(x) класса LinearRegression
+        x = np.hstack((np.ones((x.shape[0], 1)), x))
+        y_pred = x.dot(self.coef_)
+        return y_pred
