@@ -1,0 +1,33 @@
+import numpy as np
+from collections import defaultdict
+
+class KMeans(object):
+    def __init__(self, K, init):
+        self.K = K
+        self.centroids = np.array(init)
+
+    def _euclidean_distance(self, a, b):
+        return np.sqrt(np.sum((a - b) ** 2, axis=-1))
+
+    def _update_centroids(self, X, labels):
+        new_centroids = np.zeros_like(self.centroids)
+        for k in range(self.K):
+            new_centroids[k] = np.mean(X[labels == k], axis=0)
+        return new_centroids
+
+    def _assign_labels(self, X):
+        distances = self._euclidean_distance(X[:, np.newaxis], self.centroids)
+        return np.argmin(distances, axis=-1)
+
+    def fit(self, X, tol=0.001, max_iter=300):
+        for _ in range(max_iter):
+            labels = self._assign_labels(X)
+            new_centroids = self._update_centroids(X, labels)
+            max_shift = np.max(self._euclidean_distance(self.centroids, new_centroids))
+            self.centroids = new_centroids
+
+            if max_shift <= tol:
+                break
+
+    def predict(self, X):
+        return self._assign_labels(X)
